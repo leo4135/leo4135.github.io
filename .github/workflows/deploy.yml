@@ -35,7 +35,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          mv site/* ./  # Переносим содержимое из site в корень
+          cp -r site/* ./  # Переносим содержимое из site в корень
           rm -rf site
           git add .
           git commit -m "Deploy MkDocs site via GitHub Actions" || echo "No changes to commit"
