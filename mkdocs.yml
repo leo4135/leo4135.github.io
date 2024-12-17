@@ -1,1 +1,7 @@
 site_name: My Docs
+theme:
+  name: mkdocs
+  custom-dir: custom_theme
+
+plugins:
+  - macros
