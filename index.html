@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="leo4135">
+    <title>TODO для развертывания проекта</title>
+    
+    <link rel="stylesheet" href="css/theme.css">
+    
+</head>
+
+<body>
+
+    <header>
+        <ul>
+            <li>
+                <a href="/">Главная</a>
+            </li>
+        </ul>
+    </header>
+
+    <div class="wrapper">
+        
+        <h1 id="todo">TODO для развертывания проекта</h1>
+<p><strong>Шаг первый:</strong></p>
+<ul>
+<li>Склонируйте репозиторий в свое рабочее окружение</li>
+</ul>
+<blockquote>
+<p>git clone https://github.com/leo4135/leo4135.github.io.git</p>
+</blockquote>
+<p><strong>Шаг второй:</strong></p>
+<ul>
+<li>Установите виртуальное окружение и зависимости при помощи команд (а также pip):</li>
+</ul>
+<blockquote>
+<p>virtualenv python_venv</p>
+<p>source python_venv/bin/activate</p>
+<p>pip install mkdocs</p>
+</blockquote>
+<ul>
+<li>Если не установлен pip:</li>
+</ul>
+<blockquote>
+<p>python -m pip install --upgrade pip</p>
+</blockquote>
+<p><strong>Шаг третий:</strong></p>
+<ul>
+<li>Локальный запуск:</li>
+</ul>
+<blockquote>
+<p>mkdocs serve</p>
+</blockquote>
+<p><img alt="Изображение, демонстрирующее текущий шаг" src="https://i.imgur.com/P0EXIKj.png" /></p>
+<p><strong>Шаг четвертый:</strong></p>
+<ul>
+<li>
+<p>Настройка CI/CD через github ACTIONS:</p>
+</li>
+<li>
+<p>Создание новой директории в папке проекта:</p>
+<blockquote>
+<p>mkdir .github/workflows</p>
+</blockquote>
+</li>
+<li>
+<p>Перейти в вышеупомянутую директорию:</p>
+<blockquote>
+<p>cd .github/workflows</p>
+</blockquote>
+</li>
+<li>
+<p>Создать файл с расширением .yml и написать конфигурацию:</p>
+<blockquote>
+<p>nano deploy.yml</p>
+</blockquote>
+</li>
+<li>
+<p>Пример текущей конфигурации:</p>
+<p>```
+name: Deploy MkDocs and build</p>
+<p>on:
+push:
+    branches:
+    - main</p>
+<p>jobs:
+build-and-deploy:
+    runs-on: ubuntu-latest</p>
+<pre><code>steps:
+# 1. Клонируем репозиторий
+- name: Checkout repository
+    uses: actions/checkout@v3
+
+# 2. Устанавливаем Python
+- name: Setup Python
+    uses: actions/setup-python@v4
+    with:
+    python-version: 3.9
+
+# 3. Устанавливаем зависимости
+- name: Install dependencies
+    run: |
+    python -m pip install --upgrade pip
+    pip install mkdocs # Добавьте другие зависимости, если они есть
+
+# 4. Собираем сайт
+- name: Build MkDocs site
+    run: mkdocs build
+
+# 5. Заливаем собранный сайт в ветку main
+- name: Deploy to GitHub Pages
+    run: |
+    git config user.name "GitHub Actions"
+    git config user.email "actions@github.com"
+    cp -r site/* ./  # Переносим содержимое из site в корень
+    rm -rf site
+    git add .
+    git commit -m "Deploy MkDocs site via GitHub Actions" || echo "No changes to commit"
+    git push origin main
+</code></pre>
+<p>```</p>
+</li>
+</ul>
+<p><strong>Шаг пятый:</strong></p>
+<ul>
+<li>Успешный deploy при помощи <strong>github actions</strong>:</li>
+</ul>
+<blockquote>
+<p>git add .</p>
+<p>git commit -m "create config .yml for github actions"</p>
+<p>git push</p>
+</blockquote>
+<p><img alt="Демонстрация изображения с исполнением текущего шага" src="https://i.imgur.com/qU41iWQ.png" /></p>
+<p><strong>Шаг шестой:</strong></p>
+<ul>
+<li>
+<p>Кастомизация статического сайта:</p>
+</li>
+<li>
+<p>Установка плагина  mkdocs-macros-plugin для поддержки Jinja2</p>
+<blockquote>
+<p>pip install mkdocs-macros-plugin</p>
+</blockquote>
+</li>
+<li>
+<p>Создание в корневой директории файла <strong><em>main.py</em></strong> для определения глобальных переменных и функций</p>
+<p>```</p>
+<pre><code>def define_env(env):
+
+Определение макросов и переменных для MkDocs.
+
+# Глобальная переменная для шаблонов
+env.variables['author'] = "leo4135"
+
+# Пример макроса для Markdown
+@env.macro
+def get_author():
+    return env.variables['author']
+</code></pre>
+<p>```</p>
+</li>
+<li>
+<p>Подключение main.py к проекту mkdocs в .yml:</p>
+<p><code>plugins:
+     - macros:
+          module_name: main</code></p>
+</li>
+<li>
+<p>Создание директории с кастомизированной темой по примеру:</p>
+<p><code>└── my-theme/
+  ├── main.html
+  ├── css/
+  │   └── custom.css
+  └── js/
+      └── custom.js</code></p>
+</li>
+<li>
+<p>Push изменений в репозиторий и успешная сборка</p>
+</li>
+</ul>
+        
+    </div>
+
+    <footer>
+        <ul>
+            <li>
+                Политика конфиденциальности (с)
+            </li>
+        </ul>
+    </footer>
+</body>
+
+<script src="js/theme.js"></script>
+
+</html>
