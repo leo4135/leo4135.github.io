@@ -110,4 +110,40 @@
   * Установка плагина  mkdocs-macros-plugin для поддержки Jinja2
 
     > pip install mkdocs-macros-plugin
+    
+  * Создание в корневой директории файла ***main.py*** для определения глобальных переменных и функций
 
+    ```
+    def define_env(env):
+    """
+    Определение макросов и переменных для MkDocs.
+    """
+    # Глобальная переменная для шаблонов
+    env.variables['author'] = "leo4135"
+
+    # Пример макроса для Markdown
+    @env.macro
+    def get_author():
+        return env.variables['author']
+    ```
+
+  * Подключение main.py к проекту mkdocs в .yml:
+
+    ```
+      plugins:
+         - macros:
+              module_name: main
+    ```
+  
+  * Создание директории с кастомизированной темой по примеру:
+
+    ```
+    └── my-theme/
+      ├── main.html
+      ├── css/
+      │   └── custom.css
+      └── js/
+          └── custom.js
+    ```
+
+  * 

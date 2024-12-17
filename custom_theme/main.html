@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="leo4135">
+    <title>{{ page.title }}</title>
+    {% block extrahead %}
+    <link rel="stylesheet" href="css/theme.css">
+    {% endblock %}
+</head>
+
+<body>
+
+    <header>
+        <ul>
+            <li>
+                <a href="/">Главная</a>
+            </li>
+        </ul>
+    </header>
+
+    <div class="wrapper">
+        {% block content %}
+        {{ page.content }}
+        {% endblock %}
+    </div>
+
+    <footer>
+        <ul>
+            <li>
+                Политика конфиденциальности (с)
+            </li>
+        </ul>
+    </footer>
+</body>
+
+<script src="js/theme.js"></script>
+
+</html>
